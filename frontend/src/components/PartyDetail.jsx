@@ -129,6 +129,40 @@ export default function PartyDetail() {
     }
   }
 
+  const handleExportCSV = () => {
+    // Create CSV headers
+    const headers = ['#', 'Name', 'Gender', 'Added By', 'Checked In']
+    
+    // Create CSV rows
+    const rows = guests.map((guest, index) => {
+      const checkedIn = checkedInGuests.has(guest.id) ? 'Yes' : 'No'
+      return [
+        index + 1,
+        guest.name,
+        guest.gender,
+        guest.addedBy || 'Unknown',
+        checkedIn
+      ]
+    })
+    
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `${party.name.replace(/[^a-z0-9]/gi, '_')}_guest_list.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   if (!party) {
     return (
       <div className="min-h-screen bg-gray-500 p-6 flex items-center justify-center">
@@ -168,13 +202,21 @@ export default function PartyDetail() {
                     )}
                   </CardDescription>
                 </div>
-                <Button 
-                  onClick={() => navigate(`/parties/${partyId}/dashboard`, { 
-                    state: { party, guests, checkedInGuests: Array.from(checkedInGuests) }
-                  })}
-                >
-                  Go to Dashboard
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline"
+                    onClick={handleExportCSV}
+                  >
+                    Export to CSV
+                  </Button>
+                  <Button 
+                    onClick={() => navigate(`/parties/${partyId}/dashboard`, { 
+                      state: { party, guests, checkedInGuests: Array.from(checkedInGuests) }
+                    })}
+                  >
+                    Go to Dashboard
+                  </Button>
+                </div>
               </div>
             </CardHeader>
           </Card>
