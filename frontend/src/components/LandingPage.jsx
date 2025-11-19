@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-export default function LandingPage({ onContinue }) {
+export default function LandingPage() {
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
 
   // Check if name already exists in localStorage
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function LandingPage({ onContinue }) {
   const handleContinue = () => {
     if (name.trim()) {
       localStorage.setItem('userName', name.trim())
-      onContinue()
+      navigate('/parties')
     }
   }
 

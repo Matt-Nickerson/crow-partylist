@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { mockParties, getPartyStats } from '@/data/mockData'
 
-export default function PartyList({ onPartyClick }) {
+export default function PartyList() {
+  const navigate = useNavigate()
+
   return (
-    <div className="min-h-screen bg-gray-200 p-6">
+    <div className="min-h-screen bg-gray-500 p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Party Lists</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -13,7 +16,7 @@ export default function PartyList({ onPartyClick }) {
               <Card
                 key={party.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => onPartyClick(party)}
+                onClick={() => navigate(`/parties/${party.id}`)}
               >
                 <CardHeader>
                   <CardTitle>{party.name}</CardTitle>

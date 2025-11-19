@@ -94,3 +94,7 @@ export function getPartyStats(party) {
   return { total, male, female, ratio }
 }
 
+export function getPartyById(id) {
+  return mockParties.find((party) => party.id === parseInt(id))
+}
+

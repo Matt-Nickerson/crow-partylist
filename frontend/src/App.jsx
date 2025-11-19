@@ -1,35 +1,33 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import PartyList from './components/PartyList'
 import PartyDetail from './components/PartyDetail'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('landing') // 'landing', 'partyList', 'partyDetail'
-  const [selectedParty, setSelectedParty] = useState(null)
-
-  const handleLandingContinue = () => {
-    setCurrentPage('partyList')
-  }
-
-  const handlePartyClick = (party) => {
-    setSelectedParty(party)
-    setCurrentPage('partyDetail')
-  }
-
-  const handleBackToList = () => {
-    setSelectedParty(null)
-    setCurrentPage('partyList')
-  }
-
-  if (currentPage === 'landing') {
-    return <LandingPage onContinue={handleLandingContinue} />
-  }
-
-  if (currentPage === 'partyDetail') {
-    return <PartyDetail party={selectedParty} onBack={handleBackToList} />
-  }
-
-  return <PartyList onPartyClick={handlePartyClick} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/parties"
+          element={
+            <ProtectedRoute>
+              <PartyList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parties/:partyId"
+          element={
+            <ProtectedRoute>
+              <PartyDetail />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
