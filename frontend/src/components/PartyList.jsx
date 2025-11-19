@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { mockParties, getPartyStats } from '@/data/mockData'
@@ -5,12 +6,31 @@ import { mockParties, getPartyStats } from '@/data/mockData'
 export default function PartyList() {
   const navigate = useNavigate()
 
+  // Sort parties by date (newest first)
+  const sortedParties = useMemo(() => {
+    return [...mockParties].sort((a, b) => {
+      const dateA = new Date(a.date || `${a.year}-01-01`)
+      const dateB = new Date(b.date || `${b.year}-01-01`)
+      return dateB - dateA // Newest first
+    })
+  }, [])
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Date TBD'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gray-500 p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Party Lists</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockParties.map((party) => {
+          {sortedParties.map((party) => {
             const stats = getPartyStats(party)
             return (
               <Card
@@ -20,7 +40,7 @@ export default function PartyList() {
               >
                 <CardHeader>
                   <CardTitle>{party.name}</CardTitle>
-                  <CardDescription>Year: {party.year}</CardDescription>
+                  <CardDescription>{formatDate(party.date)}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
