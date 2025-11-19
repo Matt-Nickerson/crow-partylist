@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-export default function LandingPage() {
+export default function LandingPage({ onContinue }) {
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -18,8 +18,7 @@ export default function LandingPage() {
   const handleContinue = () => {
     if (name.trim()) {
       localStorage.setItem('userName', name.trim())
-      // You can add navigation logic here later
-      console.log('Name saved:', name.trim())
+      onContinue()
     }
   }
 
@@ -34,11 +33,11 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-500 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-gray-900">Welcome</h1>
-          <p className="text-gray-600">Please enter your name to continue</p>
+          <p className="text-black-600">Please enter your name to continue</p>
         </div>
         
         <div className="space-y-4">
