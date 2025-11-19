@@ -151,8 +151,31 @@ export default function PartyDetail() {
           </Button>
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl">{party.name}</CardTitle>
-              <CardDescription>Year: {party.year} • {guests.length} Total Guests</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-3xl">{party.name}</CardTitle>
+                  <CardDescription>
+                    Year: {party.year} • {guests.length} Total Guests
+                    {checkedInGuests.size > 0 && (
+                      <span className="ml-2">
+                        • Checked In: {checkedInGuests.size} ({(() => {
+                          const checkedIn = guests.filter(g => checkedInGuests.has(g.id))
+                          const males = checkedIn.filter(g => g.gender === 'male').length
+                          const females = checkedIn.filter(g => g.gender === 'female').length
+                          return `${males}M ${females}F`
+                        })()})
+                      </span>
+                    )}
+                  </CardDescription>
+                </div>
+                <Button 
+                  onClick={() => navigate(`/parties/${partyId}/dashboard`, { 
+                    state: { party, guests, checkedInGuests: Array.from(checkedInGuests) }
+                  })}
+                >
+                  Go to Dashboard
+                </Button>
+              </div>
             </CardHeader>
           </Card>
         </div>

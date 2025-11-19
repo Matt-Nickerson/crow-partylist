@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import PartyList from './components/PartyList'
 import PartyDetail from './components/PartyDetail'
+import Dashboard from './components/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -22,6 +23,14 @@ function App() {
           element={
             <ProtectedRoute>
               <PartyDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parties/:partyId/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
             </ProtectedRoute>
           }
         />
